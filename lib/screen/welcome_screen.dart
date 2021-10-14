@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:motivation_accelerator/screen/signup_screen.dart';
 
 import '../constants.dart';
 
@@ -38,6 +39,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               onPressed: () {
                 //TODO ログイン処理実装
+                print('ログイン処理');
               },
             ),
             const SizedBox(
@@ -50,7 +52,10 @@ class WelcomeScreen extends StatelessWidget {
                 style: ktButtonTextStyle,
               ),
               onPressed: () {
-                //TODO 新規登録処理実装
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignupScreen()),
+                );
               },
             ),
           ],
