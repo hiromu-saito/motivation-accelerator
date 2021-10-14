@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "967721751049",
+    "project_id": "motivation-accelerator",
+    "storage_bucket": "motivation-accelerator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967721751049:android:af733fa743716f44571ed8",
+        "android_client_info": {
+          "package_name": "io.github.hiromu_saito.motivation_accelerator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967721751049-3mvi5hfjhgef80ek19gs79ggb3k0eiod.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5TaZxEmTXM12w7-CQpWp_YUk6TAcKm1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967721751049-3mvi5hfjhgef80ek19gs79ggb3k0eiod.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
