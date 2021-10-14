@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motivation_accelerator/screen/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,10 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home:  Scaffold(
-        body: Container(child:Text('test',),),
-      )
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(),
+        home: SafeArea(
+          child: WelcomeScreen(),
+        ));
   }
 }
