@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:motivation_accelerator/screen/signup_screen.dart';
 
 import '../constants.dart';
+import 'login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -38,8 +39,10 @@ class WelcomeScreen extends StatelessWidget {
                 style: ktButtonTextStyle,
               ),
               onPressed: () {
-                //TODO ログイン処理実装
-                print('ログイン処理');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
               },
             ),
             const SizedBox(
