@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:motivation_accelerator/screen/welcome_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData.dark(),
+        builder: EasyLoading.init(),
         home: SafeArea(
           child: WelcomeScreen(),
         ));
