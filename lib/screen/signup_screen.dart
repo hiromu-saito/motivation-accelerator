@@ -5,6 +5,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:motivation_accelerator/constants.dart';
 import 'package:motivation_accelerator/utility.dart';
 
+import 'habit_screen.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
@@ -75,6 +77,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   UserCredential userCredential = await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: email, password: password);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          HabitScreen(user: userCredential.user),
+                    ),
+                  );
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
                     showErrorDialog(context, 'パスワードは8文字以上で入力してください。');

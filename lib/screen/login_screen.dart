@@ -5,6 +5,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:motivation_accelerator/constants.dart';
 import 'package:motivation_accelerator/utility.dart';
 
+import 'habit_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -76,6 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       await FirebaseAuth.instance.signInWithEmailAndPassword(
                     email: email,
                     password: password,
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          HabitScreen(user: userCredential.user),
+                    ),
                   );
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {

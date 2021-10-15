@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 final ktButtonStyle = TextButton.styleFrom(
   fixedSize: const Size.fromWidth(200),
   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-  side: const BorderSide(color: Color(0x5FFFFFFF), style: BorderStyle.solid),
+  side: const BorderSide(
+    color: Color(0x5FFFFFFF),
+  ),
 );
 
 const ktButtonTextStyle = TextStyle(
