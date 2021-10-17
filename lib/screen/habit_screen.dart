@@ -1,12 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:motivation_accelerator/screen/add_habit_screen.dart';
 import 'package:motivation_accelerator/screen/welcome_screen.dart';
 
-class HabitScreen extends StatelessWidget {
+class HabitScreen extends StatefulWidget {
   const HabitScreen({Key? key, required this.user}) : super(key: key);
 
   final User? user;
+
+  @override
+  State<HabitScreen> createState() => _HabitScreenState();
+}
+
+class _HabitScreenState extends State<HabitScreen> {
+  CollectionReference habits = FirebaseFirestore.instance.collection('habits');
+
+  List<DocumentSnapshot> documentList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getHabits();
+  }
+
+  void getHabits() async {
+    EasyLoading.show(status: 'login...');
+    String? mail = widget.user!.email;
+    final snapShot = await habits
+        .where('userMail', isEqualTo: mail)
+        .where('deleteFlag', isEqualTo: 0)
+        .get();
+    setState(() {
+      documentList = snapShot.docs;
+    });
+    EasyLoading.dismiss();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +68,7 @@ class HabitScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WelcomeScreen(),
+                    builder: (context) => const WelcomeScreen(),
                   ),
                 );
                 EasyLoading.dismiss();
@@ -54,8 +84,28 @@ class HabitScreen extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          //TODO 処理追加
-          print('habit追加処理');
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => AddHabitScreen(userMail: widget.user!.email),
+          );
+        },
+      ),
+      body: ListView.separated(
+        itemCount: documentList.length,
+        separatorBuilder: (context, index) {
+          return const Divider(
+            thickness: 0.8,
+          );
+        },
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(documentList[index]['habitName']),
+            onTap: () {
+              //TODO 次画面遷移
+              print('次画面遷移');
+            },
+          );
         },
       ),
     );
