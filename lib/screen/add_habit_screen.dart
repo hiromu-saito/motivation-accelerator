@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:motivation_accelerator/model/habit.dart';
+import 'package:motivation_accelerator/model/habit_data.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 
@@ -13,8 +17,9 @@ class AddHabitScreen extends StatefulWidget {
 }
 
 class _AddHabitScreenState extends State<AddHabitScreen> {
-  late String newHabit;
-  CollectionReference habits = FirebaseFirestore.instance.collection('habits');
+  late String newHabitName;
+  CollectionReference habitsRef =
+      FirebaseFirestore.instance.collection('habits');
 
   @override
   Widget build(BuildContext context) {
@@ -28,41 +33,48 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
             textAlign: TextAlign.center,
             onChanged: (value) {
               setState(() {
-                newHabit = value;
+                newHabitName = value;
               });
             },
           ),
         ),
-        TextButton(
-          child: const Text(
-            'start!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15.0,
-              fontWeight: FontWeight.w300,
+        Consumer<HabitData>(builder: (context, habitData, child) {
+          return TextButton(
+            child: const Text(
+              'start!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w300,
+              ),
             ),
-          ),
-          style: ktButtonStyle.copyWith(
-            fixedSize: MaterialStateProperty.all(const Size.fromWidth(100)),
-          ),
-          onPressed: () async {
-            print(newHabit);
-            if (newHabit == '') {
-              return;
-            }
-            var list =
-                await habits.orderBy('id', descending: true).limit(1).get();
-            int newId = list.docs[0]['id'] + 1;
-            await habits.add({
-              'id': newId,
-              'habitName': newHabit,
-              'userMail': widget.userMail,
-              'deleteFlag': 0,
-              'startDate': Timestamp.now(),
-            });
-            Navigator.push(context, MaterialPageRoute(builder: builder));
-          },
-        )
+            style: ktButtonStyle.copyWith(
+              fixedSize: MaterialStateProperty.all(const Size.fromWidth(100)),
+            ),
+            onPressed: () async {
+              if (newHabitName == '') {
+                return;
+              }
+              EasyLoading.show(status: 'login...');
+              var list = await habitsRef
+                  .orderBy('id', descending: true)
+                  .limit(1)
+                  .get();
+              int newId = list.docs[0]['id'] + 1;
+              var newHabit = Habit(
+                id: newId,
+                habitName: newHabitName,
+                userMail: widget.userMail!,
+                startDate: Timestamp.now(),
+              );
+              await habitsRef
+                  .add(newHabit.toMap())
+                  .then((value) => {habitData.addHabit(newHabit)});
+              EasyLoading.dismiss();
+              Navigator.pop(context);
+            },
+          );
+        }),
       ],
     );
   }
