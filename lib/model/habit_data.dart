@@ -34,4 +34,9 @@ class HabitData extends ChangeNotifier {
     _habitList.add(habit);
     notifyListeners();
   }
+
+  void removeHabit(int index) {
+    _habitList.removeAt(index);
+    notifyListeners();
+  }
 }

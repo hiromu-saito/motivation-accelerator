@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:motivation_accelerator/model/habit_data.dart';
 import 'package:motivation_accelerator/screen/add_habit_screen.dart';
 import 'package:motivation_accelerator/screen/welcome_screen.dart';
@@ -17,33 +18,8 @@ class HabitScreen extends StatefulWidget {
 }
 
 class _HabitScreenState extends State<HabitScreen> {
-  CollectionReference habits = FirebaseFirestore.instance.collection('habits');
-
-  List<DocumentSnapshot> documentList = [];
-
-  @override
-  void initState() {
-    print(widget.user!.email);
-    // Future.delayed(Duration(seconds: 1)).then((_) {
-    //   Provider.of<HabitData>(context, listen: false)
-    //       .fetchHabit(widget.user!.email);
-    // });
-    super.initState();
-  }
-
-  //
-  // void getHabits() async {
-  //   EasyLoading.show(status: 'login...');
-  //   String? mail = widget.user!.email;
-  //   final snapShot = await habits
-  //       .where('userMail', isEqualTo: mail)
-  //       .where('deleteFlag', isEqualTo: 0)
-  //       .get();
-  //   setState(() {
-  //     documentList = snapShot.docs;
-  //   });
-  //   EasyLoading.dismiss();
-  // }
+  CollectionReference habitsRef =
+      FirebaseFirestore.instance.collection('habits');
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +97,33 @@ class _HabitScreenState extends State<HabitScreen> {
                 );
               },
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(habitData.habits[index].habitName),
-                  onTap: () {
-                    //TODO 次画面遷移
-                    print('次画面遷移');
-                  },
+                return Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: 0.25,
+                  child: ListTile(
+                    title: Text(habitData.habits[index].habitName),
+                    onTap: () {
+                      //TODO 次画面遷移
+                      print('次画面遷移');
+                    },
+                  ),
+                  secondaryActions: <Widget>[
+                    IconSlideAction(
+                      caption: 'Delete',
+                      color: Colors.redAccent,
+                      icon: Icons.delete,
+                      onTap: () async {
+                        EasyLoading.show(status: 'deleting...');
+                        QuerySnapshot snapshot = await habitsRef
+                            .where('id', isEqualTo: habitData.habits[index].id)
+                            .get();
+                        String id = snapshot.docs[0].id;
+                        await habitsRef.doc(id).update({'deleteFlag': 1}).then(
+                            (value) => habitData.removeHabit(index));
+                        EasyLoading.dismiss();
+                      },
+                    )
+                  ],
                 );
               },
             ),
