@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:motivation_accelerator/model/habit_data.dart';
 import 'package:motivation_accelerator/screen/add_habit_screen.dart';
+import 'package:motivation_accelerator/screen/grass_screen.dart';
 import 'package:motivation_accelerator/screen/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -103,8 +104,15 @@ class _HabitScreenState extends State<HabitScreen> {
                   child: ListTile(
                     title: Text(habitData.habits[index].habitName),
                     onTap: () {
-                      //TODO 次画面遷移
-                      print('次画面遷移');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GrassScreen(
+                            habitId: habitData.habits[index].id,
+                            startTimeStamp: habitData.habits[index].startDate,
+                          ),
+                        ),
+                      );
                     },
                   ),
                   secondaryActions: <Widget>[
