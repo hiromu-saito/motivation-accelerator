@@ -66,6 +66,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 habitName: newHabitName,
                 userMail: widget.userMail!,
                 startDate: Timestamp.now(),
+                commits: {},
               );
               await habitsRef
                   .add(newHabit.toMap())

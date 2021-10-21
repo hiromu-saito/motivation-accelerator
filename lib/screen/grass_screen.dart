@@ -1,123 +1,51 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:collection';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
+import 'package:motivation_accelerator/model/habit.dart';
 import 'package:motivation_accelerator/screen/welcome_screen.dart';
 
 class GrassScreen extends StatelessWidget {
-  GrassScreen({required this.habitId, required this.startTimeStamp});
+  GrassScreen({required this.habit});
 
-  final int habitId;
-  final Timestamp startTimeStamp;
+  final Habit habit;
 
   @override
   Widget build(BuildContext context) {
-    DateTime startDate = startTimeStamp.toDate();
-    DateTime today = DateTime.now();
-    print('today $today');
-    print('habitId ${habitId.toString()}');
-    print('startDate ${startDate.toString()}');
-    int elapsedDays = today.difference(startDate).inDays;
-    int elapsedWeek = (elapsedDays / 7 + 1).toInt();
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
 
-    var list = [
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-      Icon(
-        Icons.stop,
-        color: Colors.greenAccent,
-      ),
-    ];
+    DateTime s = habit.startDate.toDate();
+    DateTime startDate = DateTime(s.year, s.month, s.day);
+
+    int elapsedDays = today.difference(startDate).inDays + 1;
+    LinkedHashMap<String, int> commits = LinkedHashMap();
+
+    for (int i = 0; i < elapsedDays; i++) {
+      DateTime d = startDate.add(Duration(days: i));
+      String day = DateFormat('yyyy/MM/dd').format(d);
+      if (habit.commits.containsKey(day)) {
+        commits[day] = habit.commits[day];
+      } else {
+        commits[day] = 0;
+      }
+      print('commits:$commits');
+    }
+
+    print("--------------------------");
+    commits.entries.forEach((element) {
+      print('day:${element.key}');
+      print('day:${element.value}');
+    });
+
+    List<Widget> list = commits.entries
+        .map((e) => Icon(
+              Icons.stop,
+              color: e.value == 0 ? Colors.white : Colors.greenAccent,
+            ))
+        .toList();
 
     return Scaffold(
       appBar: AppBar(

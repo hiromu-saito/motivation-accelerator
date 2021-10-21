@@ -86,6 +86,7 @@ class _HabitScreenState extends State<HabitScreen> {
           }
           if (snapshot.error != null) {
             // エラー
+            print(snapshot.error);
             return const Center(child: Text('エラーが発生しました。'));
           }
 
@@ -108,8 +109,7 @@ class _HabitScreenState extends State<HabitScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => GrassScreen(
-                            habitId: habitData.habits[index].id,
-                            startTimeStamp: habitData.habits[index].startDate,
+                            habit: habitData.habits[index],
                           ),
                         ),
                       );

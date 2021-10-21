@@ -12,13 +12,23 @@ class HabitData extends ChangeNotifier {
         .where('userMail', isEqualTo: userMail)
         .where('deleteFlag', isEqualTo: 0)
         .get();
-    _habitList = snapShot.docs
-        .map((e) => Habit(
-            id: e['id'],
-            habitName: e['habitName'],
-            startDate: e['startDate'],
-            userMail: e['userMail']))
-        .toList();
+    _habitList = snapShot.docs.map((e) {
+      // List<Commit> commits = [];
+      // e['commits'].entries.forEach((e) {
+      //   DateTime date = DateFormat('yyyy/MM/dd').parse(e.key);
+      //   final commit = Commit(date: date, commitCount: e.value);
+      //   commits.add(commit);
+      // });
+
+      return Habit(
+        id: e['id'],
+        habitName: e['habitName'],
+        startDate: e['startDate'],
+        userMail: e['userMail'],
+        commits: e['commits'],
+      );
+    }).toList();
+
     notifyListeners();
   }
 

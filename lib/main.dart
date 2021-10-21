@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 import 'model/habit_data.dart';
 
-final FirebaseMessaging _firebaseMessaging =
-    FirebaseMessaging.instance; // バックグラウンドの処理の実態
+//
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+// バックグラウンドの処理の実態
 // トップレベルに定義
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -18,6 +19,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  importance: Importance.high,
+);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +47,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<HabitData>(
       create: (_) => HabitData(),
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Motivation Accelerator',
           theme: ThemeData.dark(),
           builder: EasyLoading.init(),
           home: const SafeArea(
