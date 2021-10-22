@@ -109,7 +109,7 @@ class _HabitScreenState extends State<HabitScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => GrassScreen(
-                            habit: habitData.habits[index],
+                            id: habitData.habits[index].id,
                           ),
                         ),
                       );

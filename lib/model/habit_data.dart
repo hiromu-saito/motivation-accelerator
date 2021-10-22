@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:motivation_accelerator/model/habit.dart';
 
 class HabitData extends ChangeNotifier {
@@ -13,13 +14,6 @@ class HabitData extends ChangeNotifier {
         .where('deleteFlag', isEqualTo: 0)
         .get();
     _habitList = snapShot.docs.map((e) {
-      // List<Commit> commits = [];
-      // e['commits'].entries.forEach((e) {
-      //   DateTime date = DateFormat('yyyy/MM/dd').parse(e.key);
-      //   final commit = Commit(date: date, commitCount: e.value);
-      //   commits.add(commit);
-      // });
-
       return Habit(
         id: e['id'],
         habitName: e['habitName'],
@@ -47,6 +41,33 @@ class HabitData extends ChangeNotifier {
 
   void removeHabit(int index) {
     _habitList.removeAt(index);
+    notifyListeners();
+  }
+
+  Habit getById(int id) {
+    final index = _habitList.indexWhere((element) => element.id == id);
+    return _habitList[index];
+  }
+
+  commit(int id, DateTime dateTime) async {
+    final habit = getById(id);
+    Map<String, dynamic> processedCommits = {...habit.commits};
+
+    String day = DateFormat('yyyy/MM/dd').format(dateTime);
+    if (processedCommits.containsKey(day)) {
+      processedCommits[day]++;
+    } else {
+      processedCommits[day] = 1;
+    }
+
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      QuerySnapshot snapshot = await habitsRef.where('id', isEqualTo: id).get();
+      String docId = snapshot.docs[0].id;
+      await habitsRef.doc(docId).update({'commits': processedCommits});
+    }).then((value) {
+      habit.commits = processedCommits;
+    });
+
     notifyListeners();
   }
 }
