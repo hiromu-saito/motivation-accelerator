@@ -19,10 +19,10 @@ class HabitData extends ChangeNotifier {
         habitName: e['habitName'],
         startDate: e['startDate'],
         userMail: e['userMail'],
+        frequency: e['frequency'],
         commits: e['commits'],
       );
     }).toList();
-
     notifyListeners();
   }
 
@@ -60,7 +60,7 @@ class HabitData extends ChangeNotifier {
       processedCommits[day] = 1;
     }
 
-    FirebaseFirestore.instance.runTransaction((transaction) async {
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
       QuerySnapshot snapshot = await habitsRef.where('id', isEqualTo: id).get();
       String docId = snapshot.docs[0].id;
       await habitsRef.doc(docId).update({'commits': processedCommits});

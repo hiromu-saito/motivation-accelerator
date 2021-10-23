@@ -94,8 +94,21 @@ class GrassScreen extends StatelessWidget {
                 ),
               ),
             ),
+            Text('${habit.frequency} days a week'),
             const SizedBox(
               height: 75.0,
+            ),
+            Container(
+              padding: const EdgeInsets.all(20),
+              height: 200,
+              child: GridView.count(
+                scrollDirection: Axis.horizontal,
+                crossAxisCount: 7,
+                children: list,
+              ),
+            ),
+            const SizedBox(
+              height: 100.0,
             ),
             TextButton(
               child: const Text(
@@ -120,18 +133,6 @@ class GrassScreen extends StatelessWidget {
                 await habitData.commit(habit.id, today);
                 EasyLoading.dismiss();
               },
-            ),
-            const SizedBox(
-              height: 100.0,
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              height: 200,
-              child: GridView.count(
-                scrollDirection: Axis.horizontal,
-                crossAxisCount: 7,
-                children: list,
-              ),
             ),
           ],
         ),

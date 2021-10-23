@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Habit {
-  Habit(
-      {required this.id,
-      required this.habitName,
-      required this.userMail,
-      required this.startDate,
-      this.deleteFlag = 0,
-      required this.commits});
+  Habit({
+    required this.id,
+    required this.habitName,
+    required this.userMail,
+    required this.startDate,
+    required this.frequency,
+    required this.commits,
+    this.deleteFlag = 0,
+  });
 
   late int id;
   late String habitName;
   late String userMail;
-  late int deleteFlag;
   late Timestamp startDate;
+  late int frequency;
+  late int deleteFlag;
   late Map<String, dynamic> commits;
 
   Map<String, dynamic> toMap() {
@@ -21,8 +24,9 @@ class Habit {
       'id': id,
       'habitName': habitName,
       'userMail': userMail,
-      'deleteFlag': deleteFlag,
       'startDate': startDate,
+      'frequency': frequency,
+      'deleteFlag': deleteFlag,
     };
   }
 }
