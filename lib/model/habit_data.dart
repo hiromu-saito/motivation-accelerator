@@ -61,13 +61,13 @@ class HabitData extends ChangeNotifier {
     }
 
     await FirebaseFirestore.instance.runTransaction((transaction) async {
-      QuerySnapshot snapshot = await habitsRef.where('id', isEqualTo: id).get();
-      String docId = snapshot.docs[0].id;
-      await habitsRef.doc(docId).update({'commits': processedCommits});
+      await habitsRef.where('id', isEqualTo: id).get().then((snapshot) {
+        String docId = snapshot.docs[0].id;
+        habitsRef.doc(docId).update({'commits': processedCommits});
+      });
     }).then((value) {
       habit.commits = processedCommits;
     });
-
     notifyListeners();
   }
 }

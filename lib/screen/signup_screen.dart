@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,6 +20,8 @@ class _SignupScreenState extends State<SignupScreen> {
   late String email;
   late String password;
   FirebaseAuth auth = FirebaseAuth.instance;
+  CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +78,21 @@ class _SignupScreenState extends State<SignupScreen> {
               onPressed: () async {
                 EasyLoading.show(status: 'signup...');
                 try {
-                  UserCredential userCredential = await FirebaseAuth.instance
+                  await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
-                          email: email, password: password);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          HabitScreen(user: userCredential.user),
-                    ),
-                  );
+                          email: email, password: password)
+                      .then((userCredential) async {
+                    String? token = await _firebaseMessaging.getToken();
+                    await usersRef
+                        .add({'token': token, 'uid': userCredential.user!.uid});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            HabitScreen(user: userCredential.user),
+                      ),
+                    );
+                  });
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
                     showErrorDialog(context, 'パスワードは8文字以上で入力してください。');

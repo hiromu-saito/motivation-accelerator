@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,6 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late String email;
   late String password;
   FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -74,18 +78,31 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 EasyLoading.show(status: 'login...');
                 try {
-                  UserCredential userCredential =
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
                     email: email,
                     password: password,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          HabitScreen(user: userCredential.user),
-                    ),
-                  );
+                  )
+                      .then((userCredential) async {
+                    String? token = await _firebaseMessaging.getToken();
+                    await FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
+                      await usersRef
+                          .where('uid', isEqualTo: userCredential.user!.uid)
+                          .get()
+                          .then((snapshot) {
+                        String docId = snapshot.docs[0].id;
+                        usersRef.doc(docId).update({'token': token});
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                HabitScreen(user: userCredential.user),
+                          ),
+                        );
+                      });
+                    });
+                  });
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
                     showErrorDialog(context, '未登録のメールアドレスです。');
