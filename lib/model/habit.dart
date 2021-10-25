@@ -27,6 +27,7 @@ class Habit {
       'startDate': startDate,
       'frequency': frequency,
       'deleteFlag': deleteFlag,
+      'commits': commits,
     };
   }
 }
