@@ -71,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             TextButton(
               child: const Text(
-                'Signup',
+                'Sign Up',
                 style: ktButtonTextStyle,
               ),
               style: ktButtonStyle,

@@ -18,12 +18,14 @@ class WelcomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             DefaultTextStyle(
-              style: const TextStyle(fontSize: 20.0),
+              style: const TextStyle(
+                fontSize: 26.0,
+              ),
               child: AnimatedTextKit(
                 totalRepeatCount: 1,
                 animatedTexts: [
                   TypewriterAnimatedText(
-                    'motivation accelerator',
+                    'Motivation Accelerator',
                     speed: const Duration(milliseconds: 100),
                   ),
                 ],
