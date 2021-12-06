@@ -8,6 +8,7 @@ class Habit {
     required this.startDate,
     required this.frequency,
     required this.commits,
+    required this.uid,
     this.deleteFlag = 0,
   });
 
@@ -16,8 +17,9 @@ class Habit {
   late String userMail;
   late Timestamp startDate;
   late int frequency;
-  late int deleteFlag;
   late Map<String, dynamic> commits;
+  late String uid;
+  late int deleteFlag;
 
   Map<String, dynamic> toMap() {
     return {
@@ -27,6 +29,7 @@ class Habit {
       'startDate': startDate,
       'frequency': frequency,
       'deleteFlag': deleteFlag,
+      'uid': uid,
       'commits': commits,
     };
   }

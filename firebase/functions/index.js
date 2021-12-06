@@ -8,7 +8,7 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 const fireStore = admin.firestore();
-exports.scheduledFuction = functions.pubsub
+exports.scheduledFunction = functions.pubsub
     .schedule('every 24 hours').onRun((context) =>{
       functions.logger.info('--------------function start -----------------');
       //  データの取得
@@ -35,7 +35,6 @@ exports.scheduledFuction = functions.pubsub
 
               userSnapShot.forEach((userDoc)=>{
                 const user = userDoc.data();
-                functions.logger.info(`user.uid:${user.uid}`);
                 if (user.uid === habit.uid) {
                   token = user.token;
                 }
@@ -47,12 +46,10 @@ exports.scheduledFuction = functions.pubsub
 
               let commitCount = 0;
               Object.keys(commits).forEach((key) => {
-                functions.logger.info(key);
                 const day = key.split('/').join('-') + 'T00:00:00';
                 const date = new Date(day);
 
                 const diff = getDateDiff(oneWeekAgo, date);
-                functions.logger.info(`day:${day}, diff:${diff}`);
                 if (diff >= 0) {
                   commitCount++;
                 }

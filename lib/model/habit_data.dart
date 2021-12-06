@@ -20,6 +20,7 @@ class HabitData extends ChangeNotifier {
         startDate: e['startDate'],
         userMail: e['userMail'],
         frequency: e['frequency'],
+        uid: e['uid'],
         commits: e['commits'],
       );
     }).toList();

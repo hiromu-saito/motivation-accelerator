@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -20,7 +21,7 @@ class AddHabitScreen extends StatefulWidget {
 class _AddHabitScreenState extends State<AddHabitScreen> {
   late String newHabitName;
   late int frequency = 1;
-
+  User? user = FirebaseAuth.instance.currentUser;
   CollectionReference habitsRef =
       FirebaseFirestore.instance.collection('habits');
 
@@ -29,7 +30,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Text('What do you want to accelerate your motivation?'),
+        const Text(
+          'What do you want to accelerate your motivation?',
+          style: TextStyle(fontSize: 18.0),
+        ),
         SizedBox(
           width: 300,
           child: TextField(
@@ -44,7 +48,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         const SizedBox(
           height: 100,
         ),
-        const Text('How many days a week do you commit?'),
+        const Text(
+          'How many days a week do you commit?',
+          style: TextStyle(fontSize: 18.0),
+        ),
         SizedBox(
           width: 300,
           child: DropdownButton<int>(
@@ -104,6 +111,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   userMail: widget.userMail!,
                   startDate: Timestamp.now(),
                   frequency: frequency,
+                  uid: user!.uid,
                   commits: {},
                 );
                 await habitsRef
