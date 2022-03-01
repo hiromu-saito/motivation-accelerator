@@ -30,7 +30,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Text('What do you want to accelerate your motivation?'),
+        const Text(
+          'What do you want to accelerate your motivation?',
+          style: TextStyle(fontSize: 18.0),
+        ),
         SizedBox(
           width: 300,
           child: TextField(
@@ -45,7 +48,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         const SizedBox(
           height: 100,
         ),
-        const Text('How many days a week do you commit?'),
+        const Text(
+          'How many days a week do you commit?',
+          style: TextStyle(fontSize: 18.0),
+        ),
         SizedBox(
           width: 300,
           child: DropdownButton<int>(
@@ -105,8 +111,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   userMail: widget.userMail!,
                   startDate: Timestamp.now(),
                   frequency: frequency,
-                  commits: {},
                   uid: user!.uid,
+                  commits: {},
                 );
                 await habitsRef
                     .add(newHabit.toMap())

@@ -17,9 +17,9 @@ class Habit {
   late String userMail;
   late Timestamp startDate;
   late int frequency;
-  late int deleteFlag;
   late String uid;
   late Map<String, dynamic> commits;
+  late int deleteFlag;
 
   Map<String, dynamic> toMap() {
     return {
@@ -29,6 +29,7 @@ class Habit {
       'startDate': startDate,
       'frequency': frequency,
       'deleteFlag': deleteFlag,
+      'uid': uid,
       'commits': commits,
       'uid': uid,
     };
