@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -20,7 +21,7 @@ class AddHabitScreen extends StatefulWidget {
 class _AddHabitScreenState extends State<AddHabitScreen> {
   late String newHabitName;
   late int frequency = 1;
-
+  User? user = FirebaseAuth.instance.currentUser;
   CollectionReference habitsRef =
       FirebaseFirestore.instance.collection('habits');
 
@@ -105,6 +106,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   startDate: Timestamp.now(),
                   frequency: frequency,
                   commits: {},
+                  uid: user!.uid,
                 );
                 await habitsRef
                     .add(newHabit.toMap())
