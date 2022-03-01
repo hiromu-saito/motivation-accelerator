@@ -7,11 +7,7 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-<<<<<<< HEAD
 const fireStore = admin.fireStore();
-=======
-const fireStore = admin.firestore();
->>>>>>> 71b56a6d557b37d30d4b71d6ae105f6e331ad442
 exports.scheduledFunction = functions.pubsub
     .schedule('every 24 hours').onRun((context) =>{
       functions.logger.info('--------------function start -----------------');
@@ -39,11 +35,8 @@ exports.scheduledFunction = functions.pubsub
 
               userSnapShot.forEach((userDoc)=>{
                 const user = userDoc.data();
-<<<<<<< HEAD
                 functions.logger.info(`user.uid:${user.uid}`);
                 functions.logger.info(`habit.uid:${habit.uid}`)
-=======
->>>>>>> 71b56a6d557b37d30d4b71d6ae105f6e331ad442
                 if (user.uid === habit.uid) {
                   functions.logger.info(`token:${user.token}`)
                   token = user.token;
